@@ -16,3 +16,7 @@ app.use(cors());
 app.get('/', function(req, res) {
   res.end();
 });
+
+app.get('/test', function(req, res){
+  console.log('hello')
+})
