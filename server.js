@@ -28,6 +28,7 @@ var serviceNumbers=new Map([
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({extended: true,limit: '100mb'}));
 app.use(cors());
+app.use(authentication);
 ////////////////////////////////////////////////PATHS///////////////////////////////////////////////////
 
 app.get('/', function(req, res) {
@@ -425,5 +426,34 @@ function createGroup(body){
       });
     }
   });
+}
+
+function authentication(req, res, next) {
+  var authheader = req.headers.authorization;
+  console.log(req.headers);
+
+  if (!authheader) {
+      var err = new Error('You are not authenticated!');
+      res.setHeader('WWW-Authenticate', 'Basic');
+      err.status = 401;
+      return next(err)
+  }
+
+  var auth = new Buffer.from(authheader.split(' ')[1],
+  'base64').toString().split(':');
+  var user = auth[0];
+  var pass = auth[1];
+
+  if (user == process.env.SUSER && pass == process.env.SPASS) {
+
+      // If Authorized user
+      next();
+  } else {
+      var err = new Error('You are not authenticated!');
+      res.setHeader('WWW-Authenticate', 'Basic');
+      err.status = 401;
+      return next(err);
+  }
+
 }
 
