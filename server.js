@@ -28,7 +28,8 @@ var serviceNumbers=new Map([
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({extended: true,limit: '100mb'}));
 app.use(cors());
-app.use(authentication);
+//app.use(authentication);// turn on after testing
+
 ////////////////////////////////////////////////PATHS///////////////////////////////////////////////////
 
 app.get('/', function(req, res) {
@@ -51,23 +52,56 @@ app.post('/sendSMS', function(req, res){
 
   //add to user group
 
+  //https://api.textrequest.com/api/v3/dashboards/121/contacts/8067906072/messages
   var options = {
-    uri: 'https://api.textrequest.com/api/v3/messages',
+    uri: 'https://api.textrequest.com/api/v3/dashboards/'+serviceNumbers.get(req.body.service)[0]+'/contacts/'+req.body.phone+'/messages',
     method: 'POST',
     headers: {
       "x-api-key" : process.env.API_KEY,
       "Content-Type":"application/json"
     },
     json: {
-      "from": req.body.service,
-      "to": req.body.phone,
       "body": req.body.message,
       "sender_name": req.body.userId
     }
   };
   
   request(options, function (error, response) {
+
     if (!error && response.statusCode == 200) {
+
+      console.log('message sent');
+
+      var name=String(req.body.contactName).split('_');
+      var lName=(name.length>1)?name[1]:'';
+      var fName=name[0];
+
+
+      var con={phone_number: req.body.phone, first_name: fName, last_name: lName, display_name:fName+' '+lName};
+      console.log('contact:'+JSON.stringify(con));
+
+      var options2 = {
+        uri: 'https://api.textrequest.com/api/v3/dashboards/'+serviceNumbers.get(req.body.service)[0]+'/contacts/'+req.body.phone,
+        method: 'POST',
+        headers: {
+          "x-api-key" : process.env.API_KEY,
+          "Content-Type":"application/json",
+          "accept":"application/json"
+        },
+        json:con
+      };
+      
+      request(options2, function (error2, response4) {
+        console.log(response4.body);
+        if (!error2 && response4.statusCode == 200) {
+
+          console.log('contact created')
+          console.log(response4.body);
+        }else{
+          console.log(error2);
+        }
+        
+      });
       /*
       var options = {
         uri: 'https://api.textrequest.com/api/v3/dashboards/'+serviceNumbers.get(req.body.service)[0]+'/groups?page=0&page_size=100',

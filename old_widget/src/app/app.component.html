@@ -1,0 +1,240 @@
+<div class="container flexCol">
+<mat-card class="card">
+  <div *ngIf="showContactMessanger; else showMain">
+    <div class="flexCol">
+      <div id="MessangerHeader" class="flexCol">
+        <div id="MessangerHeaderRow1" class="flex">
+            <div id="MessangerHeaderBack">
+              <button mat-icon-button aria-label="Back Button" (click)="handleBackToMain()">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+              </button>
+            </div>
+            <div id="MessangerHeaderTitle">
+              <div *ngIf="myCurContact!=null||myCurContact!=undefined">
+
+                <div style="width:100%;display:flex;justify-content:center;">{{myCurContact.firstName}}<div class="ConvoItemNameHeaderSpace"></div>{{myCurContact.lastName}}</div>
+                <div>{{myCurContact.phone}}</div>
+                <div *ngIf="myCurContact.phone==''">
+                
+                  <div id="phoneInputDiv" style="display:flex;height: auto;justify-content:center;align-content:space-between;">
+                
+                    <div class="name-fields">
+                      <mat-form-field class="example-form-field" style="width:100px;margin:0 2%;color:black;">
+                        <mat-label style="color: black;">First Name</mat-label>
+                        <input matInput id='firstNameInput' type="text" [(ngModel)]="firstNameInput">
+                        <button mat-button *ngIf="firstNameInput" matSuffix mat-icon-button aria-label="Clear" (click)="firstNameInput=''">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </mat-form-field>
+                      <mat-form-field class="example-form-field" style="width:95px;margin:0 2%;color:black;">
+                        <mat-label style="color: black;">Last Name</mat-label>
+                        <input matInput id='lastNameInput' type="text" [(ngModel)]="lastNameInput">
+                        <button mat-button *ngIf="lastNameInput" matSuffix mat-icon-button aria-label="Clear" (click)="lastNameInput=''">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </mat-form-field>
+                    </div>
+                    <mat-form-field class="example-form-field" style="margin:0 2%;color:black;">
+                      <mat-label style="color: black;">Number</mat-label>
+                      <input matInput id='phoneInputField' type="text" [(ngModel)]="phoneInput">
+                      <button mat-button *ngIf="phoneInput" matSuffix mat-icon-button aria-label="Clear" (click)="phoneInput=''">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="MessangerHeaderInfoIcon">
+              <button mat-icon-button aria-label="Add Contact" (click)="saveContact()">
+                <mat-icon>library_add</mat-icon>
+              </button>
+            </div>
+        </div>
+        
+        <div id="MessangerHeaderRow2" class="flex">
+            <div id="MessangerHeaderRow2Spacer"></div>
+            <div id="MessangerHeaderRowPrintIcon">
+              <button mat-icon-button aria-label="Print">
+                <mat-icon>local_printshop</mat-icon>
+              </button>
+            </div>
+            <div id="MessangerHeaderRowBlockIcon">
+              <button mat-icon-button aria-label="Cancel">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </div>
+            <div id="MessangerHeaderRowDeleteIcon">
+              <button mat-icon-button aria-label="Delete Contact" (click)="removeContact()">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+        </div>
+          
+      </div>
+      <div id="MessangerContent" class="scrollable flexCol"> <!-- Messenger Content -->
+        <div *ngIf="myCurContact!=null||myCurContact!=undefined">
+          <div *ngFor="let message of myCurContact.messages">
+            <div *ngIf="message.type__c=='Zipwhip'||message.type__c=='Sender'; else showRec">
+                
+                <div class="ContentMessageSender flex">
+                    <div id="ContentSpacer">
+                    </div>
+                    <div class="flexCol">
+                        <div id={{message.id}} class="ContentMessage">
+                            <div *ngIf="message.isattachment__c">
+                                
+                                <img id={{message.id}} src="data:image/jpeg;base64,{{message.attbody__c}}"/>
+                            </div>
+                            {{message.messagebody__c}}
+                        </div>
+                        <div id="ContentMessageRecieptRight" >
+                          Sent {{message.timestamp__c}} - 
+                          <div *ngIf="message.sent_by__c;else showRightRec">
+                            {{message.sent_by__c}}
+                          </div>
+                          <ng-template #showRightRec>
+                            B Black
+                          </ng-template>
+                        </div>
+  
+                    </div>
+                </div>
+              </div>
+              <ng-template #showRec>
+                <div class="ContentMessageReceiver flex">
+                    <div class="flexCol">
+                        <div id={{message.id}} class="ContentMessage">
+                          <div *ngIf="message.isattachment__c">
+                            
+                            <img id={{message.id}} src="data:image/jpeg;base64,{{message.attbody__c}}"/>
+                          </div>
+                          {{message.messagebody__c}}
+                        </div>
+                        <div id="ContentMessageRecieptLeft" >Sent {{message.timestamp__c}} - {{myCurContact.firstName}}<div class="ConvoItemNameHeaderSpace"></div>{{myCurContact.lastName}}</div>
+                    </div>
+                    <div id="ContentSpacer">
+                    </div>
+                </div>
+            </ng-template>
+          </div>
+        </div>
+        
+      </div>
+      <div id="MessangerFooter" class="flexCol">
+          <div id="MessangerFooterRow1">
+              <div id="MessangerInputTextArea">
+                <!--<lightning:textarea aura:id="mMessageArea" value="{!v.messangerMessageValue}" placeholder="Type a message" onchange="{!c.messageOnChange}"/>-->
+                <div class="example-form" id="messangerMessageTextArea" contenteditable>
+
+                </div>
+              </div>
+          </div>
+          <div id="MessangerFooterRow2" class="flex">
+              <div id="MessangerFooterRow2Sub" class="flex">
+                  <div id="MessangerFooterTemplateIcon">
+                    <button mat-icon-button aria-label="Options" [matMenuTriggerFor]="textOptions">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #textOptions="matMenu">
+                      <button (click)="selectImage($event.target)" mat-menu-item>
+                        Select Image
+                        <input id="selectImageButton" accept="image/*" type="file" style="display:none" (change)="handleDialog($event)">
+                      </button>
+                    </mat-menu>
+                  </div>
+                  <div id="MessangerFooterRow2Spacer"></div>
+              </div>
+              <div id="MessangerSendButton">
+                <!--<lightning:button variant="brand" label="Send" title="Brand action" onclick="{! c.handleSendClick }" />-->
+                <button mat-raised-button color="blue" (click)="sendMessage()">Send</button>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #showMain>
+    <div id="Header" class="flex">
+      <!-- <div id="MenuButton">
+        <div class="NewMessageBtn"> ------------ Nothing there but keeping the code, Just in case -O.T.
+          
+        </div>
+      </div> -->
+      <div id="HeaderInfo" class="flex">
+        <div id="HeaderInfoIcon">
+          <img src="../assets/bear-placeholder-image.jpg"/>
+        </div>
+        <div id="HeaderInfoDetail" class="flexCol">
+            <div id="HeaderDetailNumber1">
+              <h2>{{accountNumber}}</h2>
+            </div>
+            <div id="HeaderDetailNumber2">
+              <h3><span class="semi-bold">Contacts:</span> {{numContacts}}</h3>
+            </div>
+        </div>
+        <div class="NewMessageBtn">
+          <button mat-icon-button aria-label="Example icon button with a open in new tab icon" (click)="handleNewMessageClick()">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+      </div>
+    </div>
+    </div>
+    <div id="Search" class="flex">
+      <div id="SearchContactBar">
+        <mat-form-field class="example-form-field">
+          <mat-label style="color: black;">Search Contact</mat-label>
+          <input  matInput type="text" [(ngModel)]="searchValue" (input)="onSearchChange($event.target.value)">
+          <button mat-button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <div id="Convos" class="flexCol color-contrast-fix">
+      <div id="ConvosCB">  
+        <mat-form-field appearance="fill">
+          <mat-label style="color: black !important;">Sort By</mat-label>
+          <mat-select [value]="selectedSortOption" (selectionChange)="onSortChange($event)">
+            <mat-option value="Recent">Most Recent</mat-option>
+            <mat-option value="Asc">A-Z</mat-option>
+            <mat-option value="Desc">Z-A</mat-option>
+          </mat-select>
+        </mat-form-field> 
+        <mat-form-field appearance="fill">
+          <mat-label style="color: black !important;">Filter By</mat-label>
+          <mat-select (selectionChange)="onFilterSortChange($event)">
+            <mat-option value="Group">Group</mat-option>
+            <mat-option value="User">User</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div id="ConvoList" class="scrollable flexCol">
+        <div *ngFor="let contact of myContactsTempArr">
+          <div id={{contact.id}} class="ConvoListItem flex" (click)="handleClickContact(contact.id)">
+            <div class="ConvoItemIcon">
+              <img class="bg" src="../assets/userIcon.png"/>
+              <div *ngIf="contact.numUnreadMessages!=0">
+                  0
+              
+              </div>
+                
+            </div>
+            
+            <div id={{contact.id}} class="ConvoListItemDetail flexCol">
+                <div class="ConvoItemNameHeader">{{contact.firstName}}<div class="ConvoItemNameHeaderSpace"></div>{{contact.lastName}}</div>
+                <div class="ConvoItemNameFooter">
+                    
+                  {{contact.lastMessage}}
+                </div>
+                <div class="ConvoListItemDetailReceipt">Last replied by {{contact.lastRepliedByName}}</div>
+            </div>
+            <div class="ConvoItemTimeStamp">{{contact.lastRepliedByDT}}</div>   
+          </div>
+        
+        </div>
+      </div>
+    </div>
+    
+  </ng-template>
+</mat-card>
+</div>     
