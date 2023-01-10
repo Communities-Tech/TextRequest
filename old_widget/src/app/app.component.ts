@@ -168,7 +168,27 @@ export class AppComponent implements OnInit{
 
     this.socket.on("update", (data) => {
 
-      console.log('update');
+      console.log('update 22');
+      
+
+      var conversation=new ZipwhipContactObj();
+      var messageR=new ZipwhipMessageObj();
+      messageR.messagebody__c='yup';
+      messageR.type__c='Sender';
+      var messageS=new ZipwhipMessageObj();
+      messageS.messagebody__c='nope';
+      messageS.type__c='Received';
+      conversation.phone='8067906072';
+      conversation.grpName='Vince Esp';
+      conversation.messages=[messageR,messageS];
+      conversation.firstName='vince';
+      conversation.lastName='esp';
+      conversation.lastMessage='esp';
+      conversation.lastRepliedByName='me';
+      
+
+      data.convoList.push(conversation);
+
       console.log(data);
 
       console.log(this.socket.id);
@@ -183,7 +203,6 @@ export class AppComponent implements OnInit{
 
           if (url.includes('?')) {
             httpParams = { fromString: url.split('?')[1] };
-
           }else{
             httpParams = null;
           }

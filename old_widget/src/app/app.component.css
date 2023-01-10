@@ -179,8 +179,8 @@ html, body {
 }
 
 #Convos{
-  height:78vh;
-  width: 100%;
+  height:70vh;
+  width: 30%;
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
@@ -318,6 +318,7 @@ html, body {
 #MessangerHeader{
     height:170px;
     width:100%;
+
    
 } 
 
@@ -351,7 +352,7 @@ html, body {
 
 #MessangerHeaderRow2Spacer{
     height:100%;
-    width:100%;
+    width:70%;
 }
 
 #MessangerHeaderRow2 button{
@@ -361,10 +362,11 @@ html, body {
 }
 
 #MessangerContent{
-    
+    margin-top: 3rem;
     height:50vh;
-    width:100%;
+    width:70%;
     background-color:white;
+    align-self: flex-end;
     
     
 }
@@ -444,6 +446,8 @@ html, body {
 #MessangerFooter{
     height:100%;
     width:100%;
+    display: flex;
+    align-content: right;
 }
 
 #MessangerFooterRow1{
@@ -454,6 +458,9 @@ html, body {
 #MessangerInputTextArea{
     height:100%;
     width:100%;
+    display: flex;
+    justify-content: flex-end;
+
 }
 
 #MessangerFooterTemplateIcon{

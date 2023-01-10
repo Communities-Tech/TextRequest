@@ -1,7 +1,9 @@
 <div class="container flexCol">
+<!-- Main Card - Refactor to be 2 cards for #ShowMain / #ShowRec within a flexrow (?) -->
 <mat-card class="card">
   <div *ngIf="showContactMessanger; else showMain">
     <div class="flexCol">
+      <!-- Header -->
       <div id="MessangerHeader" class="flexCol">
         <div id="MessangerHeaderRow1" class="flex">
             <div id="MessangerHeaderBack">
@@ -51,7 +53,7 @@
               </button>
             </div>
         </div>
-        
+        <!-- Messenger Header Options / print / cancel / delete -->
         <div id="MessangerHeaderRow2" class="flex">
             <div id="MessangerHeaderRow2Spacer"></div>
             <div id="MessangerHeaderRowPrintIcon">
@@ -72,7 +74,8 @@
         </div>
           
       </div>
-      <div id="MessangerContent" class="scrollable flexCol"> <!-- Messenger Content -->
+      <!-- Messenger Content -->
+      <div id="MessangerContent" class="scrollable flexCol"> 
         <div *ngIf="myCurContact!=null||myCurContact!=undefined">
           <div *ngFor="let message of myCurContact.messages">
             <div *ngIf="message.type__c=='Zipwhip'||message.type__c=='Sender'; else showRec">
@@ -101,6 +104,7 @@
                     </div>
                 </div>
               </div>
+              <!-- Messages -->
               <ng-template #showRec>
                 <div class="ContentMessageReceiver flex">
                     <div class="flexCol">
@@ -153,6 +157,7 @@
       </div>
     </div>
   </div>
+  <!-- Shows Main - needs to be refactored to be side-by-side with #showrec-->
   <ng-template #showMain>
     <div id="Header" class="flex">
       <!-- <div id="MenuButton">
@@ -190,6 +195,7 @@
         </mat-form-field>
       </div>
     </div>
+    <!--conversation lists -->
     <div id="Convos" class="flexCol color-contrast-fix">
       <div id="ConvosCB">  
         <mat-form-field appearance="fill">
