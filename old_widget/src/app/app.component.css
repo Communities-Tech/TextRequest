@@ -497,12 +497,14 @@ html, body {
     height:100%;
     width:100%;
     display:flex;
-    align-items:center;
+
 }
 
 #MessangerFooterRow2Sub button{
     height:100%;
     width:4vw;
+    display: flex;
+    align-self: flex-end;
 }
 
 #MessangerSendButton{
