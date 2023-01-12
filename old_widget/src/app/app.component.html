@@ -1,16 +1,6 @@
 <div class="container flexCol">
-<!-- Main Card - Refactor to be 2 cards for #ShowMain / #ShowRec within a flexrow (?) -->
-<mat-card class="card">
-  <div *ngIf="showContactMessanger; else showMain">
-    <div class="flexCol">
-      <!-- Header -->
-      <div id="MessangerHeader" class="flexCol">
+      <!-- Messanger Header -->
         <div id="MessangerHeaderRow1" class="flex">
-            <div id="MessangerHeaderBack">
-              <button mat-icon-button aria-label="Back Button" (click)="handleBackToMain()">
-                <mat-icon>keyboard_arrow_left</mat-icon>
-              </button>
-            </div>
             <div id="MessangerHeaderTitle">
               <div *ngIf="myCurContact!=null||myCurContact!=undefined">
 
@@ -72,10 +62,52 @@
               </button>
             </div>
         </div>
-          
+
+      
+    <div id="MainContainer" class="container flexRow">
+      <!-- Contact List -->
+      <div id="Convos" class="flexCol color-contrast-fix">
+        <div id="ConvosCB">  
+          <mat-form-field appearance="fill">
+            <mat-label style="color: black!important;">Sort By</mat-label>
+            <mat-select [value]="selectedSortOption" (selectionChange)="onSortChange($event)">
+              <mat-option value="Recent">Most Recent</mat-option>
+              <mat-option value="Asc">A-Z</mat-option>
+              <mat-option value="Desc">Z-A</mat-option>
+            </mat-select>
+          </mat-form-field> 
+          <mat-form-field appearance="fill">
+            <mat-label style="color: black!important;">Filter By</mat-label>
+            <mat-select (selectionChange)="onFilterSortChange($event)">
+              <mat-option value="Group">Group</mat-option>
+              <mat-option value="User">User</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div id="ConvoList" class="scrollable flexCol">
+          <div *ngFor="let contact of myContactsTempArr">
+            <div id={{contact.id}} class="ConvoListItem flex" (click)="handleClickContact(contact.id)">
+              <div class="ConvoItemIcon">
+                <img class="bg" src="../assets/userIcon.png"/>
+                <div *ngIf="contact.numUnreadMessages!=0">
+                    0
+                </div>
+              </div>
+              <div id={{contact.id}} class="ConvoListItemDetail flexCol">
+                  <div class="ConvoItemNameHeader">{{contact.firstName}}<div class="ConvoItemNameHeaderSpace"></div>{{contact.lastName}}</div>
+                  <div class="ConvoItemNameFooter">
+                      
+                    {{contact.lastMessage}}
+                  </div>
+                  <div class="ConvoListItemDetailReceipt">Last replied by {{contact.lastRepliedByName}}</div>
+              </div>
+              <div class="ConvoItemTimeStamp">{{contact.lastRepliedByDT}}</div>   
+            </div>
+          </div>
+        </div>
       </div>
       <!-- Messenger Content -->
-      <div id="MessangerContent" class="scrollable flexCol"> 
+      <div id="MessangerContent" class="scrollable"> 
         <div *ngIf="myCurContact!=null||myCurContact!=undefined">
           <div *ngFor="let message of myCurContact.messages">
             <div *ngIf="message.type__c=='Zipwhip'||message.type__c=='Sender'; else showRec">
@@ -104,7 +136,6 @@
                 </div>
               </div>
               <!-- Messages -->
-              <ng-template #showRec>
                 <div class="ContentMessageReceiver flex">
                     <div class="flexCol">
                         <div id={{message.id}} class="ContentMessage">
@@ -119,9 +150,9 @@
                     <div id="ContentSpacer">
                     </div>
                 </div>
-            </ng-template>
           </div>
         </div>
+      </div>
       </div>
       <div id="MessangerFooter" class="flexCol">
           <div id="MessangerFooterRow1">
@@ -153,87 +184,7 @@
               </div>
           </div>
       </div>
-    </div>
-  </div>
+
+
   <!-- Shows Main - needs to be refactored to be side-by-side with #showrec-->
-  <ng-template #showMain>
-    <div id="Header" class="flex">
-      <!-- <div id="MenuButton">
-        <div class="NewMessageBtn"> ------------ Nothing there but keeping the code, Just in case -O.T.
-          
-        </div>
-      </div> -->
-      <div id="HeaderInfo" class="flex">
-        <div id="HeaderInfoIcon">
-          <img src="../assets/bear-placeholder-image.jpg"/>
-        </div>
-        <div id="HeaderInfoDetail" class="flexCol">
-            <div id="HeaderDetailNumber1">
-              <h2>{{accountNumber}}</h2>
-            </div>
-            <div id="HeaderDetailNumber2">
-              <h3><span class="semi-bold">Contacts:</span> {{numContacts}}</h3>
-            </div>
-        </div>
-        <div class="NewMessageBtn">
-          <button mat-icon-button aria-label="Example icon button with a open in new tab icon" (click)="handleNewMessageClick()">
-            <mat-icon>open_in_new</mat-icon>
-          </button>
-      </div>
-    </div>
-    </div>
-    <div id="Search" class="flex">
-      <div id="SearchContactBar">
-        <mat-form-field class="example-form-field">
-          <mat-label style="color: black;">Search Contact</mat-label>
-          <input  matInput type="text" [(ngModel)]="searchValue" (input)="onSearchChange($event.target.value)">
-          <button mat-button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-      </div>
-    </div>
-    <!--conversation lists -->
-    <div id="Convos" class="flexCol color-contrast-fix">
-      <div id="ConvosCB">  
-        <mat-form-field appearance="fill">
-          <mat-label style="color: black !important;">Sort By</mat-label>
-          <mat-select [value]="selectedSortOption" (selectionChange)="onSortChange($event)">
-            <mat-option value="Recent">Most Recent</mat-option>
-            <mat-option value="Asc">A-Z</mat-option>
-            <mat-option value="Desc">Z-A</mat-option>
-          </mat-select>
-        </mat-form-field> 
-        <mat-form-field appearance="fill">
-          <mat-label style="color: black !important;">Filter By</mat-label>
-          <mat-select (selectionChange)="onFilterSortChange($event)">
-            <mat-option value="Group">Group</mat-option>
-            <mat-option value="User">User</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div id="ConvoList" class="scrollable flexCol">
-        <div *ngFor="let contact of myContactsTempArr">
-          <div id={{contact.id}} class="ConvoListItem flex" (click)="handleClickContact(contact.id)">
-            <div class="ConvoItemIcon">
-              <img class="bg" src="../assets/userIcon.png"/>
-              <div *ngIf="contact.numUnreadMessages!=0">
-                  0
-              </div>
-            </div>
-            <div id={{contact.id}} class="ConvoListItemDetail flexCol">
-                <div class="ConvoItemNameHeader">{{contact.firstName}}<div class="ConvoItemNameHeaderSpace"></div>{{contact.lastName}}</div>
-                <div class="ConvoItemNameFooter">
-                    
-                  {{contact.lastMessage}}
-                </div>
-                <div class="ConvoListItemDetailReceipt">Last replied by {{contact.lastRepliedByName}}</div>
-            </div>
-            <div class="ConvoItemTimeStamp">{{contact.lastRepliedByDT}}</div>   
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-</mat-card>
-</div>     
+</div>

@@ -7,6 +7,15 @@ html, body {
   max-height: 100%;
   max-width: 100%;
 }
+.flexCol{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.flexRow{
+    display: flex;
+}
 
 
 .scrollable{
@@ -24,6 +33,7 @@ html, body {
     color:black;
 }
 .container{
+    display: flex;
     height:100%;
     width:100%;
     max-height: 100%;
@@ -32,12 +42,18 @@ html, body {
     color:black;
 }
 
-.flexCol{
-    display:flex;
-    flex-flow:column;
-    width:100%;
-    height:100%;
+#MainContainer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%; 
+    max-height: 100%;
+    max-width: 100%;
+    background-color:#f3f5f7;
+    color:black;
+
 }
+
 
 .flex{
     display:flex;
@@ -52,7 +68,9 @@ html, body {
 }
 
 .example-form-field {
+  display: flex;
   width: 200px;
+
 
 }
 
@@ -64,6 +82,13 @@ html, body {
   color:black;
   justify-content: center;
   padding-top: 3%;
+}
+
+.mat-form-field-wrapper{
+    background-color: #0062bf;
+    margin: 0 auto;
+    display: flex;
+
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-label {
@@ -181,6 +206,7 @@ html, body {
 #Convos{
   height:70vh;
   width: 30%;
+  margin-right: .4rem;
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
@@ -205,9 +231,11 @@ html, body {
 }
 
 #ConvosCB{
-    width:50%;
+    width:100%;
     margin-bottom:1%;
+    margin-top: -8rem;
     display:flex;
+    flex-direction: column;
 }
 
 #ConvoList{
@@ -344,9 +372,10 @@ html, body {
 }
 
 #MessangerHeaderRow2{
-    height:100%;
-    width:auto;
+    height:10%;
+    width:70%;
     display:flex;
+    align-self: flex-end;
     background-color: teal;
 }
 
@@ -362,21 +391,20 @@ html, body {
 }
 
 #MessangerContent{
-    margin-top: 3rem;
-    height:50vh;
+    margin-top: 1rem;
+    height:90%;
     width:70%;
+    margin-bottom: .4rem;
     background-color:white;
-    align-self: flex-end;
-    
-    
+
 }
 
 .ContentMessageSender{
     width:100%;
-    height: auto;
+    height: 10%;
     background-color:white;
     margin-top:1%;
-    margin-bottom:1%;
+    margin-bottom:2%;
     display:flex;
 }
 
@@ -424,7 +452,7 @@ html, body {
     font-size: 12px;
     resize:none;
     overflow: auto;
-    width:100%;
+    width:70%;
     height: 100px;
     display:flex;
     flex-flow: column;
@@ -444,20 +472,22 @@ html, body {
 }
 
 #MessangerFooter{
-    height:100%;
-    width:100%;
+    height:20%;
+    width:70%;
     display: flex;
-    align-content: right;
+    align-self: flex-end;
+    margin-top: -1rem;
 }
 
 #MessangerFooterRow1{
-    height:100%;
-    width:100%;
+    height:20%;
+    width:70%;
+    align-self: right;
 }
 
 #MessangerInputTextArea{
-    height:100%;
-    width:100%;
+    height:30%;
+    width:70%;
     display: flex;
     justify-content: flex-end;
 
@@ -479,11 +509,11 @@ html, body {
 
 .example-full-width {
   width: 100%;
-  height:12vh;
+  height:3rem;
 }
 
 #MessangerInputTextArea textarea{
-    height:12vh;
+    height: 1rem;
     width:100%;
 }
 
@@ -494,7 +524,7 @@ html, body {
 }
 
 #MessangerFooterRow2Sub{
-    height:100%;
+    height:20%;
     width:100%;
     display:flex;
 
