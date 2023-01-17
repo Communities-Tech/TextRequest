@@ -35,11 +35,13 @@ html, body {
 .container{
     display: flex;
     height:100%;
-    width:100%;
+    width:98%;
     max-height: 100%;
-    max-width: 100%;
+    max-width:98%;
+    margin: 2% auto;
     background-color:#f3f5f7;
     color:black;
+    margin-bottom: 2rem;
 }
 
 #MainContainer{
@@ -69,7 +71,8 @@ html, body {
 
 .example-form-field {
   display: flex;
-  width: 200px;
+  min-width: 40%;
+  width: 80%;
 
 
 }
@@ -351,10 +354,11 @@ html, body {
 } 
 
 #MessangerHeaderRow1{
+    display: flex;
     height:auto;
-    width:auto;
+    margin-top: 1%;
+    width:100%;
     background-color:#f3f5f7;
-    padding:2%;
 }
 
 #MessangerHeaderRow1 button{
@@ -374,6 +378,7 @@ html, body {
 #MessangerHeaderRow2{
     height:10%;
     width:70%;
+    margin-bottom: 0 auto;
     display:flex;
     align-self: flex-end;
     background-color: teal;
@@ -392,7 +397,7 @@ html, body {
 
 #MessangerContent{
     margin-top: 1rem;
-    height:90%;
+    height:98%;
     width:70%;
     margin-bottom: .4rem;
     background-color:white;
@@ -400,12 +405,14 @@ html, body {
 }
 
 .ContentMessageSender{
-    width:100%;
+    width:98%;
     height: 10%;
     background-color:white;
     margin-top:1%;
     margin-bottom:2%;
     display:flex;
+    margin-right: 1%;
+
 }
 
 .ContentMessageReceiver{
@@ -443,6 +450,7 @@ html, body {
     flex-direction: column;
     align-items: flex-start;
     padding: 8px 8px 5px;
+    margin: 2%;
 }
 
 #messangerMessageTextArea{
@@ -450,12 +458,13 @@ html, body {
     padding: 2px;
     border: 1px solid gray;
     font-size: 12px;
-    resize:none;
-    overflow: auto;
-    width:70%;
-    height: 100px;
+    overflow-y: scroll;
+    width: 80%;
+    min-width: 70%;
+    min-height: 3rem;
     display:flex;
     flex-flow: column;
+    margin-bottom: 2rem;
 }
 
 #ContentMessageRecieptLeft{
@@ -472,24 +481,28 @@ html, body {
 }
 
 #MessangerFooter{
-    height:20%;
+    height:100%;
     width:70%;
     display: flex;
     align-self: flex-end;
-    margin-top: -1rem;
+    justify-content: center;
+
 }
 
 #MessangerFooterRow1{
-    height:20%;
-    width:70%;
-    align-self: right;
+    width:100%;
+    display: flex; 
+    height: 3rem;
+    justify-content: space-between;
+    margin-top: 0 auto;
+    margin-bottom: 2rem;
 }
 
 #MessangerInputTextArea{
     height:30%;
-    width:70%;
+    width:100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
 
 }
 
@@ -500,10 +513,7 @@ html, body {
 }
 
 .example-form {
-  margin-top: 2%;
   min-width: 150px;
-  max-width: 500px;
-  width: 100%;
   background-color: whitesmoke;
 }
 
@@ -514,33 +524,15 @@ html, body {
 
 #MessangerInputTextArea textarea{
     height: 1rem;
+    margin-bottom: 2rem;
     width:100%;
 }
 
-#MessangerFooterRow2{
-    height:4vh;
-    width:100%;
-    margin-top: 3%;
-}
-
-#MessangerFooterRow2Sub{
-    height:20%;
-    width:100%;
-    display:flex;
-
-}
-
-#MessangerFooterRow2Sub button{
-    height:100%;
-    width:4vw;
-    display: flex;
-    align-self: flex-end;
-}
 
 #MessangerSendButton{
     display:flex;
-    justify-content:center;
-    align-items:center;
+    justify-content: flex-end;
+    margin-right: 2%;
 }
 
 

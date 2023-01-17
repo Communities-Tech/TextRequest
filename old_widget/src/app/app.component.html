@@ -154,34 +154,30 @@
         </div>
       </div>
       </div>
-      <div id="MessangerFooter" class="flexCol">
+      <div id="MessangerFooter" class="flexRow">
           <div id="MessangerFooterRow1">
-              <div id="MessangerInputTextArea">
-                <!--<lightning:textarea aura:id="mMessageArea" value="{!v.messangerMessageValue}" placeholder="Type a message" onchange="{!c.messageOnChange}"/>-->
-                <div class="example-form" id="messangerMessageTextArea" contenteditable>
 
-                </div>
-              </div>
-          </div>
-          <div id="MessangerFooterRow2" class="flex">
-              <div id="MessangerFooterRow2Sub" class="flex">
-                  <div id="MessangerFooterTemplateIcon">
-                    <button mat-icon-button aria-label="Options" [matMenuTriggerFor]="textOptions">
-                      <mat-icon>more_vert</mat-icon>
+
+                  <button mat-icon-button aria-label="Options" [matMenuTriggerFor]="textOptions">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #textOptions="matMenu">
+                    <button (click)="selectImage($event.target)" mat-menu-item>
+                      Select Image
+                      <input id="selectImageButton" accept="image/*" type="file" style="display:none" (change)="handleDialog($event)">
                     </button>
-                    <mat-menu #textOptions="matMenu">
-                      <button (click)="selectImage($event.target)" mat-menu-item>
-                        Select Image
-                        <input id="selectImageButton" accept="image/*" type="file" style="display:none" (change)="handleDialog($event)">
-                      </button>
-                    </mat-menu>
-                  </div>
-                  <div id="MessangerFooterRow2Spacer"></div>
-              </div>
+                  </mat-menu>
+
+                <div class="example-form" id="messangerMessageTextArea" contenteditable>
+    
+                </div>
+                <!--<lightning:textarea aura:id="mMessageArea" value="{!v.messangerMessageValue}" placeholder="Type a message" onchange="{!c.messageOnChange}"/>-->
+
               <div id="MessangerSendButton">
                 <!--<lightning:button variant="brand" label="Send" title="Brand action" onclick="{! c.handleSendClick }" />-->
                 <button mat-raised-button color="blue" (click)="sendMessage()">Send</button>
               </div>
+
           </div>
       </div>
 

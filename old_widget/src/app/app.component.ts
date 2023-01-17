@@ -169,11 +169,10 @@ export class AppComponent implements OnInit{
     this.socket.on("update", (data) => {
 
       console.log('update 22');
-      
-
+       
       var conversation=new ZipwhipContactObj();
       var messageR=new ZipwhipMessageObj();
-      messageR.messagebody__c='yup';
+      messageR.messagebody__c='yup, that is correct here is what i think now and maybe later just need this message to be a bit longer please maybe like three columnds if it wraps correctly good lord i hope it does';
       messageR.type__c='Sender';
       var messageS=new ZipwhipMessageObj();
       messageS.messagebody__c='nope';
