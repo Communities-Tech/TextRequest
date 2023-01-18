@@ -7,6 +7,15 @@ html, body {
   max-height: 100%;
   max-width: 100%;
 }
+.flexCol{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.flexRow{
+    display: flex;
+}
 
 
 .scrollable{
@@ -24,20 +33,29 @@ html, body {
     color:black;
 }
 .container{
+    display: flex;
     height:100%;
-    width:100%;
+    width:98%;
+    max-height: 100%;
+    max-width:98%;
+    margin: 2% auto;
+    background-color:#f3f5f7;
+    color:black;
+    margin-bottom: 2rem;
+}
+
+#MainContainer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%; 
     max-height: 100%;
     max-width: 100%;
     background-color:#f3f5f7;
     color:black;
+
 }
 
-.flexCol{
-    display:flex;
-    flex-flow:column;
-    width:100%;
-    height:100%;
-}
 
 .flex{
     display:flex;
@@ -52,7 +70,10 @@ html, body {
 }
 
 .example-form-field {
-  width: 200px;
+  display: flex;
+  min-width: 40%;
+  width: 80%;
+
 
 }
 
@@ -64,6 +85,13 @@ html, body {
   color:black;
   justify-content: center;
   padding-top: 3%;
+}
+
+.mat-form-field-wrapper{
+    background-color: #0062bf;
+    margin: 0 auto;
+    display: flex;
+
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-label {
@@ -179,8 +207,9 @@ html, body {
 }
 
 #Convos{
-  height:78vh;
-  width: 100%;
+  height:70vh;
+  width: 30%;
+  margin-right: .4rem;
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
@@ -205,9 +234,11 @@ html, body {
 }
 
 #ConvosCB{
-    width:50%;
+    width:100%;
     margin-bottom:1%;
+    margin-top: -8rem;
     display:flex;
+    flex-direction: column;
 }
 
 #ConvoList{
@@ -318,14 +349,16 @@ html, body {
 #MessangerHeader{
     height:170px;
     width:100%;
+
    
 } 
 
 #MessangerHeaderRow1{
+    display: flex;
     height:auto;
-    width:auto;
+    margin-top: 1%;
+    width:100%;
     background-color:#f3f5f7;
-    padding:2%;
 }
 
 #MessangerHeaderRow1 button{
@@ -343,15 +376,17 @@ html, body {
 }
 
 #MessangerHeaderRow2{
-    height:100%;
-    width:auto;
+    height:10%;
+    width:70%;
+    margin-bottom: 0 auto;
     display:flex;
+    align-self: flex-end;
     background-color: teal;
 }
 
 #MessangerHeaderRow2Spacer{
     height:100%;
-    width:100%;
+    width:70%;
 }
 
 #MessangerHeaderRow2 button{
@@ -361,21 +396,23 @@ html, body {
 }
 
 #MessangerContent{
-    
-    height:50vh;
-    width:100%;
+    margin-top: 1rem;
+    height:98%;
+    width:70%;
+    margin-bottom: .4rem;
     background-color:white;
-    
-    
+
 }
 
 .ContentMessageSender{
-    width:100%;
-    height: auto;
+    width:98%;
+    height: 10%;
     background-color:white;
     margin-top:1%;
-    margin-bottom:1%;
+    margin-bottom:2%;
     display:flex;
+    margin-right: 1%;
+
 }
 
 .ContentMessageReceiver{
@@ -413,6 +450,7 @@ html, body {
     flex-direction: column;
     align-items: flex-start;
     padding: 8px 8px 5px;
+    margin: 2%;
 }
 
 #messangerMessageTextArea{
@@ -420,12 +458,13 @@ html, body {
     padding: 2px;
     border: 1px solid gray;
     font-size: 12px;
-    resize:none;
-    overflow: auto;
-    width:100%;
-    height: 100px;
+    overflow-y: scroll;
+    width: 80%;
+    min-width: 70%;
+    min-height: 3rem;
     display:flex;
     flex-flow: column;
+    margin-bottom: 2rem;
 }
 
 #ContentMessageRecieptLeft{
@@ -443,17 +482,28 @@ html, body {
 
 #MessangerFooter{
     height:100%;
-    width:100%;
+    width:70%;
+    display: flex;
+    align-self: flex-end;
+    justify-content: center;
+
 }
 
 #MessangerFooterRow1{
-    height:100%;
     width:100%;
+    display: flex; 
+    height: 3rem;
+    justify-content: space-between;
+    margin-top: 0 auto;
+    margin-bottom: 2rem;
 }
 
 #MessangerInputTextArea{
-    height:100%;
+    height:30%;
     width:100%;
+    display: flex;
+    justify-content: center;
+
 }
 
 #MessangerFooterTemplateIcon{
@@ -463,45 +513,26 @@ html, body {
 }
 
 .example-form {
-  margin-top: 2%;
   min-width: 150px;
-  max-width: 500px;
-  width: 100%;
   background-color: whitesmoke;
 }
 
 .example-full-width {
   width: 100%;
-  height:12vh;
+  height:3rem;
 }
 
 #MessangerInputTextArea textarea{
-    height:12vh;
+    height: 1rem;
+    margin-bottom: 2rem;
     width:100%;
 }
 
-#MessangerFooterRow2{
-    height:4vh;
-    width:100%;
-    margin-top: 3%;
-}
-
-#MessangerFooterRow2Sub{
-    height:100%;
-    width:100%;
-    display:flex;
-    align-items:center;
-}
-
-#MessangerFooterRow2Sub button{
-    height:100%;
-    width:4vw;
-}
 
 #MessangerSendButton{
     display:flex;
-    justify-content:center;
-    align-items:center;
+    justify-content: flex-end;
+    margin-right: 2%;
 }
 
 
