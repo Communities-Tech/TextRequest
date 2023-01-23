@@ -1,14 +1,16 @@
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 3000;
 const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config();
 const app = express();
 const cors = require('cors');
-var server = app.listen(PORT);
 var fs = require('fs');
-const ngrok = require('ngrok');
+//const ngrok = require('ngrok');
 var request= require('request');
 var jsforce = require('jsforce');
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+
 
 var serviceNumbers=new Map([
   ['+18063753738',['34640','Insurance Sales']],
@@ -25,16 +27,29 @@ var serviceNumbers=new Map([
   console.log(url);
 })();*/
 
+const httpServer = createServer(app);
+
+httpServer.keepAliveTimeout = 61 * 1000;
+httpServer.headersTimeout = 65 * 1000;
+httpServer.setTimeout(200000);
+httpServer.timeout = 1000 * 60 * 5; 
+
+const io = new Server(httpServer, {});
+httpServer.listen(process.env.PORT);
+
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({extended: true,limit: '100mb'}));
 app.use(cors());
+app.use(express.static('./dist/my-first-project'));
+var sockets = [];
+
 //app.use(authentication);// turn on after testing
 
 ////////////////////////////////////////////////PATHS///////////////////////////////////////////////////
 
 app.get('/', function(req, res) {
-  
-  res.json('connected').status(200);
+  res.sendFile('index.html', {root: 'dist/my-first-project/'});
+
 });
 
 app.post('/sendSMS', function(req, res){
@@ -295,6 +310,168 @@ app.post('/webhooks/msg_received', function(req, res){
   res.end();
 });
 
+app.post('/webhooks/contact_updated', function(req, res){
+
+  console.log(req.body);
+
+  res.end();
+});
+
+app.post('/deleteGroups', function(req, res){
+
+  console.log('good');
+
+  var options = {
+    uri: 'https://api.textrequest.com/api/v3/dashboards/34666/groups/?page=0&page_size=1000',
+    method: 'GET',
+    headers: {
+      "x-api-key" : process.env.API_KEY,
+      "Content-Type":"application/json"
+    }
+  };
+  
+  request(options, function (error, response) {
+
+    if (response.statusCode == 200) {
+
+      console.log('good');
+      var arr=JSON.parse(response.body).items;
+
+      for(var i=0;i<arr.length;i++){
+
+        var id=String(arr[i].id).trim();
+
+        var options2 = {
+          uri: 'https://api.textrequest.com/api/v3/dashboards/34666/groups/'+id,
+          method: 'DELETE',
+          headers: {
+            "x-api-key" : process.env.API_KEY,
+            "accept":"*/*"
+          }
+        };
+        
+        request(options2, function (error2, response4) {
+  
+          if (response4.statusCode == 200) {
+  
+            console.log('group'+id+' deleted');
+
+          }else{
+            console.log(response4.body);
+          }
+          
+        });
+      }
+      
+      
+    }else{
+      console.log(response.body);
+    }
+  });
+     
+  res.end();
+});
+
+io.on('connection', (socket)=> {
+  sockets.push(socket);
+  console.log('Socket: client connected id: '+socket.id + ' count is: ' + sockets.length);
+
+  socket.on("disconnect", ()=> {
+
+    console.log("disconnect "+socket.id);
+
+    let index = sockets.indexOf(socket.id);
+    sockets.splice(index, 1);
+  
+  });
+  
+  socket.on("getGroupContacts", (req)=> {
+  
+    console.log(socket.id + ' requested GETGROUPCONTACTS payload');
+
+    var dashes=String(req.query.dashes).split(';');
+    var user=req.query.user;
+    var broadcast=req.query.broadcast;
+    var cons=[];
+
+    try {
+
+    
+      for(var dash of dashes){
+        cons.push(getGroupContacts('+1'+dash,user,broadcast));
+
+      }
+
+      Promise.all(cons).then((values) => {
+
+
+        var data=[];
+        
+
+        for(var con of values){
+          for(var c of con){
+            var contactObj={};
+            var messageObjs=[];
+            c.messages.forEach(message=>{
+              var messageObj={messagebody__c:message.body,type__c:(String(message.message_direction)==='S')?'Sender':'Received',attbody__c:'',id:'',timestamp__c:''};
+              messageObjs.push(messageObj);
+            });
+            
+            contactObj.phone=c.phone;
+            contactObj.messages=messageObjs;
+            contactObj.firstName=c.firstName;
+            contactObj.lastName=c.lastName;
+            contactObj.lastMessage=c.lastMessage;
+            contactObj.lastRepliedByName=c.firstName;
+            contactObj.id=c.phone;
+            contactObj.grpName="";
+            contactObj.numUnreadMessages=0;
+
+            data.push(contactObj);
+          }
+        }
+        
+        if(!broadcast){
+          io.to(socket.id).emit('update',{convoList:data});
+
+        }else{
+          io.emit('update',{convoList:data});
+
+        }
+    
+      }).catch(err=>console.log(err));
+
+
+    } catch (error) {
+
+      console.log('getGRoupContacts: '+error);
+    }
+
+  });
+
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
+
+  socket.on('clientError', (err, socket) => {
+    console.error(err);
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+  });
+
+  socket.on('error', function () {
+    
+    console.log('SERVER :: error');
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+    
+  });
+
+  socket.on('timeout', function () {
+    console.log('SERVER :: error');
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+  });
+
+});
+
 function sendNotificationToSF(users,messageObj){
 
   try {
@@ -491,3 +668,92 @@ function authentication(req, res, next) {
 
 }
 
+
+async function getGroupContacts(dash,user,broadcast){
+
+  console.log(dash);
+  return new Promise((resolve) => {
+
+    var contacts=[];
+    
+    var contactOps = {
+      uri: 'https://api.textrequest.com/api/v3/dashboards/'+serviceNumbers.get(dash)[0]+'/contacts?page_size=1000&page=0',
+      method: 'GET',
+      headers: {
+        "x-api-key" : process.env.API_KEY,
+        "Content-Type":"application/json"
+      }
+    };
+
+    request(contactOps, function (error, response) {
+
+      var pro=[];
+
+      if (!error && response.statusCode == 200) {
+        
+        var cons = JSON.parse(response.body).items;
+
+        for(var contact of Array.from(cons)){
+
+          pro.push(new Promise((res) => {
+
+            var phone = contact.phone_number;
+            var fName= contact.first_name;
+            var lName = contact.last_name;
+            var lMessage= contact.lastMessage;
+    
+            var convoOps = {
+              uri: 'https://api.textrequest.com/api/v3/dashboards/'+serviceNumbers.get(dash)[0]+'/contacts/'+phone+'/messages',
+              method: 'GET',
+              headers: {
+                "x-api-key" : process.env.API_KEY,
+                "Content-Type":"application/json"
+              }
+            };
+
+            request(convoOps, function (error, response2) {
+        
+              if (!error && response2.statusCode == 200) {
+          
+                var messages=[];
+                var resMess=JSON.parse(response2.body).items;
+
+                for(var message of resMess){
+  
+                  messages.push(message);
+                }
+                
+      
+                var nContact={lastMessage:lMessage,firstName:fName,lastName:lName,phone:phone,messages:messages};
+            
+                res(nContact);
+                
+              }else{
+                console.log('error 2');
+              }
+            });
+          }));
+        
+        }
+
+        Promise.all(pro).then((values) => {
+
+          for(var con of values){
+
+            contacts.push(con);
+          }
+          resolve(contacts);
+        }).catch(err=>console.log(err));
+        
+      }else{
+
+        console.log('error 1');
+      }
+
+    });
+
+  }).then(vals=>{
+    return vals;
+
+  });
+}
