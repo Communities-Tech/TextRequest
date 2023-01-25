@@ -107,7 +107,7 @@
         </div>
       </div>
       <!-- Messenger Content -->
-      <div id="MessangerContent" class="scrollable"> 
+      <div id="MessangerContent"> 
         <div *ngIf="myCurContact!=null||myCurContact!=undefined">
           <div *ngFor="let message of myCurContact.messages">
             <div *ngIf="message.type__c=='Zipwhip'||message.type__c=='Sender'; else showRec">
