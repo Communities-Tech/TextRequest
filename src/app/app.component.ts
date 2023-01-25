@@ -6,12 +6,11 @@ import { ZipwhipContactObj } from './ZipwhipContactObj';
 import {HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from "rxjs/operators";
-import {io} from 'socket.io-client/build/index';
 import { WebService } from './web.service';
 import { ActivatedRoute } from '@angular/router';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
+import {io} from 'socket.io-client';
 
 @Component({
   selector: 'app-root',
@@ -68,11 +67,11 @@ export class AppComponent implements OnInit{
     this.formGroup = new FormGroup({
 
       name: new FormControl('', [
-  
+
           Validators.required,
-  
+
       ])
-  
+
     });
 
     this.showContactMessanger=false;
@@ -100,12 +99,12 @@ export class AppComponent implements OnInit{
 
     this.socket = io(location.origin);
     this.initLoad=true;
-    
+
   }
 
   ngOnInit() {
 
-    
+
 
     this.socket.on('connect', () => {
       console.log("on connect:THIS SOCKET IS id is");
@@ -116,7 +115,7 @@ export class AppComponent implements OnInit{
 
     var httpParams;
     const url = window.location.href;
-    
+
 
     if (url.includes('?')) {
       httpParams = new HttpParams({ fromString: url.split('?')[1] });
@@ -130,7 +129,7 @@ export class AppComponent implements OnInit{
 
       if(String(httpParams.get('session'))=='Team Champions'||String(httpParams.get('session'))=='Team Majors'||String(httpParams.get('session'))=='Dream Team'){
         this.accountNumber='+1(806) 391-4068';
-        
+
       }else{
         this.accountNumber='+1(877) 475-4553';
       }
@@ -156,14 +155,14 @@ export class AppComponent implements OnInit{
           socket:true,
           broadcast:false}
       });
-      
+
     });
-      
+
 
     this.socket.on("update", (data) => {
 
       console.log('update 22');
-      
+
 
       console.log(data);
 
@@ -174,7 +173,7 @@ export class AppComponent implements OnInit{
         if(data.add==true){
 
           console.log('HERE BABY');
-          
+
           const url = window.location.href;
 
           if (url.includes('?')) {
@@ -201,7 +200,7 @@ export class AppComponent implements OnInit{
           this.myCurContact.phone=data.convoList;
           this.myCurContact.firstName=String(httpParams.get('firstName'));
           this.myCurContact.lastName=String(httpParams.get('lastName'));
-          
+
           this.phoneInput=data.convoList;
           this.firstNameInput=String(httpParams.get('firstName'));
           this.lastNameInput=String(httpParams.get('lastName'));
@@ -211,7 +210,7 @@ export class AppComponent implements OnInit{
 
         }else if(data.remove==true){
           console.log('HERE BABY');
-          
+
           const url = window.location.href;
 
           if (url.includes('?')) {
@@ -257,12 +256,12 @@ export class AppComponent implements OnInit{
         if(this.initLoad){
           var ev= {value:'Recent'};
           this.onSortChange(ev);
-  
+
           if(httpParams!=null){
             if(httpParams.get('recordPhone')!=null){
-  
+
               var r = String(httpParams.get('recordPhone'));
-  
+
               var foundCont= this.myContactsArr.find(element => {
                 var el = element.phone.replace(/(\()*(\))*(\-)*(\s)*(\+1)*(\.)*/g,'');
                 var ht = httpParams.get('recordPhone').replace(/(\()*(\))*(\-)*(\s)*(\+1)*(\.)*/g,'');
@@ -276,20 +275,20 @@ export class AppComponent implements OnInit{
               });
 
               console.log('FOUND: '+ foundCont);
-        
+
               if(foundCont!=null||foundCont!=undefined){
-  
+
                 this.showContactMessanger=true;
                 this.myCurContact=foundCont;
-  
+
                 window.setTimeout(function(){
                   var scroll = document.getElementById("MessangerContent");
                   console.log(scroll);
                   if(scroll!=null){
-                    scroll.scrollTop = scroll.scrollHeight;  
+                    scroll.scrollTop = scroll.scrollHeight;
                     console.log(scroll.scrollHeight);
                   }},100);
-                  
+
               }else{
                 this.myCurContact=new ZipwhipContactObj();
                 this.phoneInput='';
@@ -320,16 +319,16 @@ export class AppComponent implements OnInit{
               var el = element.phone.replace(/(\()*(\))*(\-)*(\s)*(\+1)*(\.)*/g,'');
               //console.log(element.phone.replace(/(\()*(\))*(\-)*(\s)*(\+1)*(\.)*/,'') + ' TO '+this.myCurContact.phone);
               if(el==this.myCurContact.phone.replace(/(\()*(\))*(\-)*(\s)*(\+1)*(\.)*/g,'')){
-  
+
                 return element;
               }
             });
-  
+
             window.setTimeout(function(){
               var scroll = document.getElementById("MessangerContent");
               //console.log(scroll);
               if(scroll!=null){
-                scroll.scrollTop = scroll.scrollHeight;  
+                scroll.scrollTop = scroll.scrollHeight;
                 //console.log(scroll.scrollHeight);
               }
             },100);
@@ -339,11 +338,11 @@ export class AppComponent implements OnInit{
       }else{
         //this.http.get<ZipwhipContactObj[]>('/api/getGroupContacts/?account='+httpParams.get('session')+'&user='+httpParams.get('user')+'&division='+httpParams.get('div')+'&unit='+httpParams.get('unit')+'&department='+httpParams.get('dpt')).subscribe();
       }
-      
+
     });
 
-   
-    
+
+
     return () => this.socket.disconnect();
   }
 
@@ -352,17 +351,17 @@ export class AppComponent implements OnInit{
     this.showContactMessanger=true;
     this.myCurContact=this.myContactsArr.find(value => value.id == contactId);
 
-    
-    
+
+
     window.setTimeout(function(){
       var scroll = document.getElementById("MessangerContent");
       //console.log(scroll);
       if(scroll!=null){
-        scroll.scrollTop = scroll.scrollHeight;  
+        scroll.scrollTop = scroll.scrollHeight;
         console.log(scroll.scrollHeight);
       }
     },100);
-    
+
   }
 
   doTextareaValueChange(ev) {
@@ -383,38 +382,38 @@ export class AppComponent implements OnInit{
     for(var i=0;i<imgs.length;i++){
 
       if(imgs[i].tagName=='IMG'){
-      
+
         imgList.push(this.getBase64Image(imgs[i]));
       }
-      
+
     }
     var s = document.getElementById("messangerMessageTextArea").innerHTML.replace(regex1,'\\n');
-   
+
     //console.log(s.trim());
     s=s.replace(/&nbsp;/g, '');
     let message = s.trim();//document.getElementById("messangerMessageTextArea").innerHTML;
 
-    
+
     const url = window.location.href;
     var httpParams;
     var firstName,lastName;
     var phone='';
 
     console.log(phone);
-    
+
     if (url.includes('?')) {
       httpParams = new HttpParams({ fromString: url.split('?')[1] });
 
       if(httpParams.get('user')!=undefined){
         if(String(httpParams.get('user')!='undefined')){
           console.log(JSON.parse(JSON.stringify(message)));
-        
+
           message+="\\n\\n"+String(httpParams.get('user'));
           message=JSON.parse(JSON.stringify(message));
         }
       }
-      
-      
+
+
     }
 
     console.log('CONTACT PHONE: ' +String(this.myCurContact.phone).length);
@@ -488,17 +487,17 @@ export class AppComponent implements OnInit{
     var lw=String(img.name).split('x');
     canvas.width = Number(lw[0]);
     canvas.height = Number(lw[1]);
-  
+
     // Copy the image contents to the canvas
     var ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0);
-  
+
     // Get the data-URL formatted image
     // Firefox supports PNG and JPEG. You could check img.src to
     // guess the original format, but be aware the using "image/jpg"
     // will re-encode the image.
     var dataURL = canvas.toDataURL("image/jpg");
-  
+
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
   }
 
@@ -510,11 +509,11 @@ export class AppComponent implements OnInit{
     this.lastNameInput='';
     this.showContactMessanger=true;
 
-    
+
   }
 
   handleBackToMain(){
-    
+
     this.showContactMessanger=false;
     this.myCurContact=new ZipwhipContactObj();
 
@@ -536,10 +535,10 @@ export class AppComponent implements OnInit{
     if(httpParams){
       try {
         if(ev.value=='User'){
-          
+
           var user=httpParams.get('user');
           this.myContactsTempArr = this.myContactsArr.filter(cont=>{
-    
+
             var cutUser=cont.grpName.split('_')[3];
             console.log(cont.grpName+ ' contains '+cutUser);
             if(cutUser==user){
@@ -548,11 +547,11 @@ export class AppComponent implements OnInit{
             }else{
                 return false;
             }
-            
+
           });
           //this.myContactsTempArr = this.myContactsArr.filter(cont=>cont.grpName.includes(httpParams.get('user')));
         }else if(ev.value=='Group'){
-    
+
           this.myContactsTempArr= this.myContactsArr;
         }
       } catch (error) {
@@ -566,7 +565,7 @@ export class AppComponent implements OnInit{
 
     try {
       if(ev.value=='Recent'){
-    
+
         const sortByDate = arr => {
           const sorter = (a, b) => {
              return new Date(b.lastRepliedByDT).getTime() - new Date(a.lastRepliedByDT).getTime();
@@ -576,9 +575,9 @@ export class AppComponent implements OnInit{
        sortByDate(this.myContactsTempArr);
 
        this.selectedSortOption='Recent';
-  
+
       }else if(ev.value=='Asc'){
-  
+
         this.myContactsTempArr=this.myContactsTempArr.sort((a, b) => {
 
           var nameA,nameB;
@@ -594,13 +593,13 @@ export class AppComponent implements OnInit{
             return -1;
           if (nameA > nameB)
             return 1;
-          return 0; 
+          return 0;
         });
 
         this.selectedSortOption='Asc';
-        
+
       }else if(ev.value=='Desc'){
-  
+
         this.myContactsTempArr=this.myContactsTempArr.sort((b, a) => {
 
           var nameA,nameB;
@@ -616,16 +615,16 @@ export class AppComponent implements OnInit{
             return -1;
           if (nameA > nameB)
             return 1;
-          return 0; 
+          return 0;
         });
 
         this.selectedSortOption='Desc';
-        
+
       }
     } catch (error) {
       console.log(error);
     }
-    
+
   }
 
   onSearchChange(searchValue){
@@ -642,10 +641,10 @@ export class AppComponent implements OnInit{
             return cont;
           }
         }
-        
+
       });
     }
-    
+
   }
 
   clearSearchValue(){
@@ -670,16 +669,16 @@ export class AppComponent implements OnInit{
       if(child.nodeName=='INPUT'){
         child.click();
       }
-      
+
     });
-    
+
   }
 
   async handleDialog(e){
     console.log(e.target.files[0]);
     await this.toBase64(e.target.files[0]).then((val)=>{
       //var divContainer = document.createElement('div');
-   
+
       var img = document.createElement('img');
       var newImg = new Image();
       newImg.src = String(val);
@@ -688,7 +687,7 @@ export class AppComponent implements OnInit{
         img.setAttribute('src',String(val));
         img.setAttribute('style','transform-origin: left;');
         img.setAttribute('name',String(newImg.width)+'x'+String(newImg.height));
-  
+
         ///divContainer.appendChild(img);
         document.getElementById("messangerMessageTextArea").appendChild(img);
       }
@@ -714,11 +713,11 @@ export class AppComponent implements OnInit{
     console.log('fName: '+httpParams.lastName);
 
 
-    
+
     this.ws.AddContact(phone,httpParams,true);
 
   }
-  
+
   removeContact(){
 
     const url = window.location.href;
@@ -738,7 +737,7 @@ export class AppComponent implements OnInit{
     console.log('fName: '+httpParams.lastName);
 
 
-    
+
     this.ws.RemoveContact(phone,httpParams);
   }
 }
