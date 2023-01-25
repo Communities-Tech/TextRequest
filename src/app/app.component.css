@@ -398,9 +398,12 @@ html, body {
 #MessangerContent{
     margin-top: 1rem;
     height:98%;
+    max-height: 98%;
     width:70%;
     margin-bottom: .4rem;
     background-color:white;
+    overflow-y: auto;
+    overflow-x: hidden;
 
 }
 
