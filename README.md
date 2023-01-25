@@ -12,6 +12,8 @@ Run `npm ng serve` To serve - This will only serve, not run the project.
 ## Build & Run 
 run `npm ng build` to build then `npm run start` in order to run on localhost:3000 - Full URL with actual backend data: `localhost:3000/?phone=8067906072&firstName=allie&lastName=test%20allie&userId=0053m00000AhgChAAJ&allowedServices=8063753738;8063040609`
 
+Note: this doesn't include hotloading at this moment in time - fix incoming. 
+
 ## Code scaffolding
 
 Run `npm ng generate component component-name` to generate a new component. You can also use `npm ng generate directive|pipe|service|class|guard|interface|enum|module`.
