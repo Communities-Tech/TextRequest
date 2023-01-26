@@ -46,10 +46,12 @@ html, body {
 
 #MainContainer{
     display: flex;
+    flex-wrap: nowrap;
     flex-direction: row;
     width: 100%;
     height: 100%; 
-    max-height: 100%;
+    min-height:1000px;
+    max-height:1200px;
     max-width: 100%;
     background-color:#f3f5f7;
     color:black;
@@ -398,16 +400,18 @@ html, body {
 #MessangerContent{
     margin-top: 1rem;
     height:98%;
-    max-height: 98%;
+    min-height:500px;
+    max-height:1200px;
     width:70%;
     margin-bottom: .4rem;
     background-color:white;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
-
 }
 
 .ContentMessageSender{
+    display: flex;
+    flex-wrap: nowrap;
     width:98%;
     height: 10%;
     background-color:white;
